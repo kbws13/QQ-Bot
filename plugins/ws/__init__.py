@@ -1,4 +1,12 @@
-import nonebot
+from nonebot import on_message
+from nonebot.adapters.onebot.v11 import Bot, Event
+from nonebot.rule import to_me, startswith
 
-bots = nonebot.get_bots()
-print(bots)
+rule = to_me() & startswith(("!"), ignorecase=False)
+
+websocket = on_message(rule=rule)
+
+
+@websocket.handle()
+async def handle_message(bot: Bot, event: Event):
+    print(f"Received message: {event.get_message()}")

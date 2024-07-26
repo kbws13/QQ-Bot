@@ -12,7 +12,12 @@ driver.register_adapter(BotAdapter)
 
 # 在这里加载插件
 nonebot.load_builtin_plugins("echo")  # 内置插件
-# nonebot.load_plugin("thirdparty_plugin")  # 第三方插件
+# 服务器状态
+nonebot.load_plugin("nonebot_plugin_status")
+# 云签到
+nonebot.load_plugin('nonebot_plugin_cloudsignx')
+# 天气
+nonebot.load_plugin('nonebot_plugin_weather_lite')
 nonebot.load_plugins("plugins")  # 本地插件
 
 if __name__ == "__main__":
