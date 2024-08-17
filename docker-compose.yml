@@ -1,0 +1,9 @@
+version: '3'
+services:
+  qq-bot:
+    container_name: qq-bot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app

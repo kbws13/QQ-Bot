@@ -3,13 +3,13 @@ from nonebot import on_command, get_bot
 from nonebot.adapters.onebot.v11 import MessageSegment, Event, GroupMessageEvent, PrivateMessageEvent
 from nonebot.rule import to_me
 
-leg = on_command("腿", rule=to_me(), aliases={"leg", "腿"}, priority=10, block=True)
+km = on_command("km", rule=to_me(), aliases={"km"}, priority=10, block=True)
 
 
-@leg.handle()
+@km.handle()
 async def handle_function(event: Event):
     """
-    美腿
+    福利视频
     """
     bot = get_bot()
     # 判断消息是否来自群聊
@@ -20,27 +20,42 @@ async def handle_function(event: Event):
         group_id = None  # 私聊消息没有group_id
         user_id = event.get_user_id()  # 获取用户ID
     else:
-        await leg.finish("无法识别的消息类型。")
+        await km.finish("无法识别的消息类型。")
         return
 
-    response = requests.get("https://api.yujn.cn/api/qlyx.php", params={
-        'type': 'json',
-        'count': 10
+    response = requests.get("https://api.yujn.cn/api/kuaimao.php", params={
+        'type': 'json'
     })
     data = response.json()
-    images = data['img']
 
     messages = []
-    for img_url in images:
-        message = {
-            "type": "node",
-            "data": {
-                "name": "K-Bot",
-                "uin": "3931952215",
-                "content": [MessageSegment.image(img_url)]
-            }
+    title = {
+        "type": "node",
+        "data": {
+            "name": "K-Bot",
+            "uin": "3931952215",
+            "content": [MessageSegment.text(data['title'])]
         }
-        messages.append(message)
+    }
+    messages.append(title)
+    cover = {
+        "type": "node",
+        "data": {
+            "name": "K-Bot",
+            "uin": "3931952215",
+            "content": [MessageSegment.image(data['image'])]
+        }
+    }
+    messages.append(cover)
+    video = {
+        "type": "node",
+        "data": {
+            "name": "K-Bot",
+            "uin": "3931952215",
+            "content": [MessageSegment.text(data['video'])]
+        }
+    }
+    messages.append(video)
 
     if group_id:
         # 调用API发送群聊转发消息
